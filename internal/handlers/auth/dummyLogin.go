@@ -37,7 +37,7 @@ func (h *Handler) DummyLogin(ctx echo.Context) error {
 	//	})
 	//}
 
-	token, err := auth.GenerateToken("mock@mail.ru", string(req.Role))
+	token, err := auth.GenerateToken("mocks@mail.ru", string(req.Role))
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, base.ErrorResponse{
 			Message: "failed to generate token",

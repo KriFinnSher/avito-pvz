@@ -116,15 +116,5 @@ func (h *Handler) GetAll(ctx echo.Context) error {
 		end = total
 	}
 
-	return ctx.JSON(http.StatusOK, struct {
-		TotalCount int                `json:"totalCount"`
-		Page       int                `json:"page"`
-		Limit      int                `json:"limit"`
-		PVZs       []base.PVZResponse `json:"pvzs"`
-	}{
-		TotalCount: total,
-		Page:       page,
-		Limit:      limit,
-		PVZs:       filtered[start:end],
-	})
+	return ctx.JSON(http.StatusOK, filtered[start:end])
 }
