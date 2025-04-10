@@ -1,0 +1,13 @@
+server:
+  host: 127.0.0.1
+  port: 8080
+
+db:
+  host: db
+  port: 5432
+  user: postgres
+  pass: 4392
+  name: pvz
+
+jwt:
+  secret_key: "f2d31a8ce75e4b78a9ef0cf3d2f8bd9479c763df67f1ea023f463e9e2f5bc1a0"
