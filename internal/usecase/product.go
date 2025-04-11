@@ -65,12 +65,6 @@ func (p *ProductUseCase) AddNew(ctx context.Context, product models.Product) err
 
 // GetReceptionList retrieves the list of products for the specified reception
 func (p *ProductUseCase) GetReceptionList(ctx context.Context, receptionID uuid.UUID) ([]models.Product, error) {
-	openStatus := p.receptionRepo.IsOpen(ctx, receptionID)
-	if !openStatus {
-		p.logger.Info("Attempted to get all products from closed reception", "receptionID", receptionID)
-		return nil, errors.New("reception is closed, unable to interact")
-	}
-
 	p.logger.Info("Fetching products from reception", "receptionID", receptionID)
 
 	products, err := p.productRepo.GetForReception(ctx, receptionID)
