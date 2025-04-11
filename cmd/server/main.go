@@ -50,9 +50,9 @@ func main() {
 	pvzUU := usecase.NewPVZUseCase(pvzRepo, logger)
 	receptionUU := usecase.NewReceptionUseCase(receptionRepo, logger)
 
-	authHandler := auth.NewAuthHandler(userUU, logger)
-	pvzHandler := pvz.NewPvzHandler(pvzUU, receptionUU, productUU, logger)
-	receptionHandler := reception.NewReceptionHandler(receptionUU, productUU, logger)
+	authHandler := auth.NewAuthHandler(userUU)
+	pvzHandler := pvz.NewPvzHandler(pvzUU, receptionUU, productUU)
+	receptionHandler := reception.NewReceptionHandler(receptionUU, productUU)
 
 	e.POST("/dummyLogin", authHandler.DummyLogin)
 	e.POST("/register", authHandler.Register)

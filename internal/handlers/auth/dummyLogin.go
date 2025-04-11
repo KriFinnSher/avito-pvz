@@ -5,21 +5,18 @@ import (
 	base "avito-pvz/internal/handlers"
 	"avito-pvz/internal/usecase"
 	"github.com/labstack/echo/v4"
-	"log/slog"
 	"net/http"
 )
 
 // Handler structure stands for all authorization handlers, e.g. /dummyLogin, /login and /register
 type Handler struct {
 	UserUU *usecase.UserUseCase
-	logger *slog.Logger
 }
 
 // NewAuthHandler simply creates new Handler instance
-func NewAuthHandler(uuu *usecase.UserUseCase, logger *slog.Logger) *Handler {
+func NewAuthHandler(uuu *usecase.UserUseCase) *Handler {
 	return &Handler{
 		UserUU: uuu,
-		logger: logger,
 	}
 }
 

@@ -6,7 +6,6 @@ import (
 	"avito-pvz/internal/usecase"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"log/slog"
 	"net/http"
 	"time"
 )
@@ -15,15 +14,13 @@ import (
 type Handler struct {
 	ReceptionUU *usecase.ReceptionUseCase
 	ProductUU   *usecase.ProductUseCase
-	logger      *slog.Logger
 }
 
 // NewReceptionHandler creates new instance of Handler
-func NewReceptionHandler(ruu *usecase.ReceptionUseCase, puu *usecase.ProductUseCase, logger *slog.Logger) *Handler {
+func NewReceptionHandler(ruu *usecase.ReceptionUseCase, puu *usecase.ProductUseCase) *Handler {
 	return &Handler{
 		ReceptionUU: ruu,
 		ProductUU:   puu,
-		logger:      logger,
 	}
 }
 
