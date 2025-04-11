@@ -6,6 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
+//go:generate mockery --name=Repository --output=../../mocks/product --with-expecter --case=underscore
+
 // Repository defines methods for managing product records related to receptions
 type Repository interface {
 	DeleteLast(ctx context.Context, receptionID uuid.UUID) error
