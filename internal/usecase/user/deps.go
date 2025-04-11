@@ -5,7 +5,7 @@ import (
 	"context"
 )
 
-//go:generate mockery --name=Repository --output=../../mocks/user --with-expecter --case=underscore
+//go:generate mockery --name=Repository --output=../../mocks/user --with-expecter
 
 // Repository defines methods for managing users
 type Repository interface {

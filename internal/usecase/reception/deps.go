@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-//go:generate mockery --name=Repository --output=../../mocks/reception --with-expecter --case=underscore
+//go:generate mockery --name=Repository --output=../../mocks/reception --with-expecter
 
 // Repository defines methods for managing reception records tied to PVZ locations
 type Repository interface {

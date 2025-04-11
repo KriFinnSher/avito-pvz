@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-//go:generate mockery --name=Repository --output=../../mocks/product --with-expecter --case=underscore
+//go:generate mockery --name=Repository --output=../../mocks/product --with-expecter
 
 // Repository defines methods for managing product records related to receptions
 type Repository interface {

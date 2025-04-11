@@ -19,22 +19,17 @@ func TestRemoveFromReception_Success(t *testing.T) {
 	ctx := context.Background()
 	receptionID := uuid.New()
 
-	// Моки
 	productRepo := mockProduct.NewRepository(t)
 	receptionRepo := mockReception.NewRepository(t)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	// Настройка поведения моков
-	receptionRepo.On("IsOpen", ctx, receptionID).Return(true)  // приемка открыта
-	productRepo.On("DeleteLast", ctx, receptionID).Return(nil) // успешное удаление продукта
+	receptionRepo.On("IsOpen", ctx, receptionID).Return(true)
+	productRepo.On("DeleteLast", ctx, receptionID).Return(nil)
 
-	// Создание UseCase
 	useCase := NewProductUseCase(productRepo, receptionRepo, logger)
 
-	// Вызов метода
 	err := useCase.RemoveFromReception(ctx, receptionID)
 
-	// Проверки
 	assert.NoError(t, err)
 	receptionRepo.AssertCalled(t, "IsOpen", ctx, receptionID)
 	productRepo.AssertCalled(t, "DeleteLast", ctx, receptionID)
@@ -44,21 +39,16 @@ func TestRemoveFromReception_ReceptionClosed_Error(t *testing.T) {
 	ctx := context.Background()
 	receptionID := uuid.New()
 
-	// Моки
 	productRepo := mockProduct.NewRepository(t)
 	receptionRepo := mockReception.NewRepository(t)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	// Настройка поведения моков
-	receptionRepo.On("IsOpen", ctx, receptionID).Return(false) // приемка закрыта
+	receptionRepo.On("IsOpen", ctx, receptionID).Return(false)
 
-	// Создание UseCase
 	useCase := NewProductUseCase(productRepo, receptionRepo, logger)
 
-	// Вызов метода
 	err := useCase.RemoveFromReception(ctx, receptionID)
 
-	// Проверки
 	assert.Error(t, err)
 	assert.Equal(t, "reception is closed, unable to interact", err.Error())
 	receptionRepo.AssertCalled(t, "IsOpen", ctx, receptionID)
@@ -70,22 +60,17 @@ func TestAddNew_Success(t *testing.T) {
 	productID := uuid.New()
 	receptionID := uuid.New()
 
-	// Моки
 	productRepo := mockProduct.NewRepository(t)
 	receptionRepo := mockReception.NewRepository(t)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	// Настройка поведения моков
-	receptionRepo.On("IsOpen", ctx, receptionID).Return(true)                                          // приемка открыта
-	productRepo.On("AddOne", ctx, models.Product{ID: productID, ReceptionId: receptionID}).Return(nil) // успешное добавление продукта
+	receptionRepo.On("IsOpen", ctx, receptionID).Return(true)
+	productRepo.On("AddOne", ctx, models.Product{ID: productID, ReceptionId: receptionID}).Return(nil)
 
-	// Создание UseCase
 	useCase := NewProductUseCase(productRepo, receptionRepo, logger)
 
-	// Вызов метода
 	err := useCase.AddNew(ctx, models.Product{ID: productID, ReceptionId: receptionID})
 
-	// Проверки
 	assert.NoError(t, err)
 	receptionRepo.AssertCalled(t, "IsOpen", ctx, receptionID)
 	productRepo.AssertCalled(t, "AddOne", ctx, models.Product{ID: productID, ReceptionId: receptionID})
@@ -96,21 +81,16 @@ func TestAddNew_ReceptionClosed_Error(t *testing.T) {
 	productID := uuid.New()
 	receptionID := uuid.New()
 
-	// Моки
 	productRepo := mockProduct.NewRepository(t)
 	receptionRepo := mockReception.NewRepository(t)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	// Настройка поведения моков
-	receptionRepo.On("IsOpen", ctx, receptionID).Return(false) // приемка закрыта
+	receptionRepo.On("IsOpen", ctx, receptionID).Return(false)
 
-	// Создание UseCase
 	useCase := NewProductUseCase(productRepo, receptionRepo, logger)
 
-	// Вызов метода
 	err := useCase.AddNew(ctx, models.Product{ID: productID, ReceptionId: receptionID})
 
-	// Проверки
 	assert.Error(t, err)
 	assert.Equal(t, "reception is closed, unable to interact", err.Error())
 	receptionRepo.AssertCalled(t, "IsOpen", ctx, receptionID)
@@ -121,23 +101,18 @@ func TestGetReceptionList_Success(t *testing.T) {
 	ctx := context.Background()
 	receptionID := uuid.New()
 
-	// Моки
 	productRepo := mockProduct.NewRepository(t)
 	receptionRepo := mockReception.NewRepository(t)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	// Настройка поведения моков
-	productRepo.On("GetForReception", ctx, receptionID).Return([]models.Product{{ID: uuid.New()}}, nil) // успешное получение списка продуктов
+	productRepo.On("GetForReception", ctx, receptionID).Return([]models.Product{{ID: uuid.New()}}, nil)
 
-	// Создание UseCase
 	useCase := NewProductUseCase(productRepo, receptionRepo, logger)
 
-	// Вызов метода
 	products, err := useCase.GetReceptionList(ctx, receptionID)
 
-	// Проверки
 	assert.NoError(t, err)
-	assert.Len(t, products, 1) // ожидаем, что вернется 1 продукт
+	assert.Len(t, products, 1)
 	productRepo.AssertCalled(t, "GetForReception", ctx, receptionID)
 }
 
@@ -145,21 +120,16 @@ func TestGetReceptionList_Error(t *testing.T) {
 	ctx := context.Background()
 	receptionID := uuid.New()
 
-	// Моки
 	productRepo := mockProduct.NewRepository(t)
 	receptionRepo := mockReception.NewRepository(t)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	// Настройка поведения моков
-	productRepo.On("GetForReception", ctx, receptionID).Return(nil, assert.AnError) // ошибка при получении продуктов
+	productRepo.On("GetForReception", ctx, receptionID).Return(nil, assert.AnError)
 
-	// Создание UseCase
 	useCase := NewProductUseCase(productRepo, receptionRepo, logger)
 
-	// Вызов метода
 	products, err := useCase.GetReceptionList(ctx, receptionID)
 
-	// Проверки
 	assert.Error(t, err)
 	assert.Nil(t, products)
 	productRepo.AssertCalled(t, "GetForReception", ctx, receptionID)

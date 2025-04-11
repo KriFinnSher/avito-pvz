@@ -5,7 +5,7 @@ import (
 	"context"
 )
 
-//go:generate mockery --name=Repository --output=../../mocks/pvz --with-expecter --case=underscore
+//go:generate mockery --name=Repository --output=../../mocks/pvz --with-expecter
 
 // Repository defines methods for managing PVZ (pickup point) records
 type Repository interface {
