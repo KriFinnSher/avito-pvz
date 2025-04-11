@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config is used to store data from config.yaml file in convenient struct
 type Config struct {
 	Server struct {
 		Host string `mapstructure:"host"`
@@ -23,6 +24,7 @@ type Config struct {
 
 var AppConfig Config
 
+// SetUp is used to set up global var for storing config data
 func SetUp() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")

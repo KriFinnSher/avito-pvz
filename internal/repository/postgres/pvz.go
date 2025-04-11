@@ -8,11 +8,13 @@ import (
 	"log/slog"
 )
 
+// PVZRepo manages database operations related to pickup points (pvz)
 type PVZRepo struct {
 	db     *sqlx.DB
 	logger *slog.Logger
 }
 
+// NewPVZRepo creates a new instance of PVZRepo
 func NewPVZRepo(db *sqlx.DB, logger *slog.Logger) *PVZRepo {
 	return &PVZRepo{
 		db:     db,
@@ -20,6 +22,7 @@ func NewPVZRepo(db *sqlx.DB, logger *slog.Logger) *PVZRepo {
 	}
 }
 
+// Create inserts a new PVZ record into the database
 func (p *PVZRepo) Create(ctx context.Context, pvz models.PVZ) error {
 	query, args, err := sq.
 		Insert("pvz").
@@ -42,6 +45,7 @@ func (p *PVZRepo) Create(ctx context.Context, pvz models.PVZ) error {
 	return nil
 }
 
+// GetAll retrieves all PVZ records from the database
 func (p *PVZRepo) GetAll(ctx context.Context) ([]models.PVZ, error) {
 	query, args, err := sq.
 		Select("id", "registration_date", "city").

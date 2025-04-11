@@ -11,11 +11,13 @@ import (
 	"log/slog"
 )
 
+// ProductRepo handles database operations related to products table
 type ProductRepo struct {
 	db     *sqlx.DB
 	logger *slog.Logger
 }
 
+// NewProductRepo creates a new instance of ProductRepo
 func NewProductRepo(db *sqlx.DB, logger *slog.Logger) *ProductRepo {
 	return &ProductRepo{
 		db:     db,
@@ -23,6 +25,7 @@ func NewProductRepo(db *sqlx.DB, logger *slog.Logger) *ProductRepo {
 	}
 }
 
+// DeleteLast removes the last added product for the reception with specific id
 func (p *ProductRepo) DeleteLast(ctx context.Context, receptionID uuid.UUID) error {
 	tx, err := p.db.BeginTxx(ctx, nil)
 	if err != nil {
@@ -80,6 +83,7 @@ func (p *ProductRepo) DeleteLast(ctx context.Context, receptionID uuid.UUID) err
 	return nil
 }
 
+// AddOne inserts a new product into the repository
 func (p *ProductRepo) AddOne(ctx context.Context, product models.Product) error {
 	query, args, err := sq.
 		Insert("products").
@@ -102,6 +106,7 @@ func (p *ProductRepo) AddOne(ctx context.Context, product models.Product) error 
 	return nil
 }
 
+// GetForReception returns products linked to the reception with specific id
 func (p *ProductRepo) GetForReception(ctx context.Context, receptionID uuid.UUID) ([]models.Product, error) {
 	query, args, err := sq.
 		Select("id", "date_time", "type", "reception_id").

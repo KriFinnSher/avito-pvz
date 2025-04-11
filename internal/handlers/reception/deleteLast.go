@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// DeleteLast handler removes last (LIFO) product from last open reception if present
 func (h *Handler) DeleteLast(ctx echo.Context) error {
 	pvzIdStr := ctx.Param("pvzId")
 	pvzId, err := uuid.Parse(pvzIdStr)

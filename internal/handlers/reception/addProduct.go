@@ -11,12 +11,14 @@ import (
 	"time"
 )
 
+// Handler structure stands for all reception manipulating handlers
 type Handler struct {
 	ReceptionUU *usecase.ReceptionUseCase
 	ProductUU   *usecase.ProductUseCase
 	logger      *slog.Logger
 }
 
+// NewReceptionHandler creates new instance of Handler
 func NewReceptionHandler(ruu *usecase.ReceptionUseCase, puu *usecase.ProductUseCase, logger *slog.Logger) *Handler {
 	return &Handler{
 		ReceptionUU: ruu,
@@ -25,6 +27,7 @@ func NewReceptionHandler(ruu *usecase.ReceptionUseCase, puu *usecase.ProductUseC
 	}
 }
 
+// AddProduct handler creates new product and adds it to the last open reception of pvz with specific id
 func (h *Handler) AddProduct(ctx echo.Context) error {
 	var req base.ProductRequest
 	if err := ctx.Bind(&req); err != nil {

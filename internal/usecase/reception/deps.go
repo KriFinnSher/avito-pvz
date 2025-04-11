@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Repository defines methods for managing reception records tied to PVZ locations
 type Repository interface {
 	Create(ctx context.Context, reception models.Reception) error
 	CloseLast(ctx context.Context, pvzID uuid.UUID) error

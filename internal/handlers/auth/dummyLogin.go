@@ -9,11 +9,13 @@ import (
 	"net/http"
 )
 
+// Handler structure stands for all authorization handlers, e.g. /dummyLogin, /login and /register
 type Handler struct {
 	UserUU *usecase.UserUseCase
 	logger *slog.Logger
 }
 
+// NewAuthHandler simply creates new Handler instance
 func NewAuthHandler(uuu *usecase.UserUseCase, logger *slog.Logger) *Handler {
 	return &Handler{
 		UserUU: uuu,
@@ -21,6 +23,7 @@ func NewAuthHandler(uuu *usecase.UserUseCase, logger *slog.Logger) *Handler {
 	}
 }
 
+// DummyLogin handler receiving role and responding with token (only for tests)
 func (h *Handler) DummyLogin(ctx echo.Context) error {
 	var req base.DummyRequest
 

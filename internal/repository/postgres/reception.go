@@ -11,11 +11,13 @@ import (
 	"log/slog"
 )
 
+// ReceptionRepo handles database operations related to receptions table
 type ReceptionRepo struct {
 	db     *sqlx.DB
 	logger *slog.Logger
 }
 
+// NewReceptionRepo creates a new instance of ReceptionRepo
 func NewReceptionRepo(db *sqlx.DB, logger *slog.Logger) *ReceptionRepo {
 	return &ReceptionRepo{
 		db:     db,
@@ -23,6 +25,7 @@ func NewReceptionRepo(db *sqlx.DB, logger *slog.Logger) *ReceptionRepo {
 	}
 }
 
+// Create inserts a new reception record into the database
 func (r *ReceptionRepo) Create(ctx context.Context, reception models.Reception) error {
 	query, args, err := sq.
 		Insert("receptions").
@@ -45,6 +48,7 @@ func (r *ReceptionRepo) Create(ctx context.Context, reception models.Reception) 
 	return nil
 }
 
+// CloseLast closes the most recent reception for the given PVZ ID
 func (r *ReceptionRepo) CloseLast(ctx context.Context, pvzID uuid.UUID) error {
 	query, args, err := sq.
 		Select("id").
@@ -87,6 +91,7 @@ func (r *ReceptionRepo) CloseLast(ctx context.Context, pvzID uuid.UUID) error {
 	return nil
 }
 
+// IsOpen checks if the reception with the given ID is still open
 func (r *ReceptionRepo) IsOpen(ctx context.Context, receptionID uuid.UUID) bool {
 	query, args, err := sq.Select("status").
 		From("receptions").
@@ -119,6 +124,7 @@ func (r *ReceptionRepo) IsOpen(ctx context.Context, receptionID uuid.UUID) bool 
 	return false
 }
 
+// GetLast retrieves the most recent reception for the given PVZ ID
 func (r *ReceptionRepo) GetLast(ctx context.Context, pvzID uuid.UUID) (models.Reception, error) {
 	query, args, err := sq.Select("id", "date_time", "pvz_id", "status").
 		From("receptions").
@@ -142,6 +148,7 @@ func (r *ReceptionRepo) GetLast(ctx context.Context, pvzID uuid.UUID) (models.Re
 	return reception, nil
 }
 
+// GetAllForPVZ retrieves all receptions for the given PVZ ID
 func (r *ReceptionRepo) GetAllForPVZ(ctx context.Context, pvzID uuid.UUID) ([]models.Reception, error) {
 	query, args, err := sq.
 		Select("id", "date_time", "pvz_id", "status").

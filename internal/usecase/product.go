@@ -10,12 +10,14 @@ import (
 	"log/slog"
 )
 
+// ProductUseCase handles business logic related to products and their receptions
 type ProductUseCase struct {
 	productRepo   product.Repository
 	receptionRepo reception.Repository
 	logger        *slog.Logger
 }
 
+// NewProductUseCase creates a new ProductUseCase
 func NewProductUseCase(pRepo product.Repository, rRepo reception.Repository, logger *slog.Logger) *ProductUseCase {
 	return &ProductUseCase{
 		productRepo:   pRepo,
@@ -24,6 +26,7 @@ func NewProductUseCase(pRepo product.Repository, rRepo reception.Repository, log
 	}
 }
 
+// RemoveFromReception deletes the last product from the specified reception (if open)
 func (p *ProductUseCase) RemoveFromReception(ctx context.Context, receptionID uuid.UUID) error {
 	openStatus := p.receptionRepo.IsOpen(ctx, receptionID)
 	if !openStatus {
@@ -41,6 +44,7 @@ func (p *ProductUseCase) RemoveFromReception(ctx context.Context, receptionID uu
 	return nil
 }
 
+// AddNew adds a new product to the repository (if open)
 func (p *ProductUseCase) AddNew(ctx context.Context, product models.Product) error {
 	openStatus := p.receptionRepo.IsOpen(ctx, product.ReceptionId)
 	if !openStatus {
@@ -59,6 +63,7 @@ func (p *ProductUseCase) AddNew(ctx context.Context, product models.Product) err
 	return nil
 }
 
+// GetReceptionList retrieves the list of products for the specified reception
 func (p *ProductUseCase) GetReceptionList(ctx context.Context, receptionID uuid.UUID) ([]models.Product, error) {
 	openStatus := p.receptionRepo.IsOpen(ctx, receptionID)
 	if !openStatus {

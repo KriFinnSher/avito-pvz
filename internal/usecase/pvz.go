@@ -7,11 +7,13 @@ import (
 	"log/slog"
 )
 
+// PVZUseCase contains business logic for managing PVZ (pickup point) operations
 type PVZUseCase struct {
 	pvzRepo pvz.Repository
 	logger  *slog.Logger
 }
 
+// NewPVZUseCase creates a new PVZUseCase
 func NewPVZUseCase(pRepo pvz.Repository, logger *slog.Logger) *PVZUseCase {
 	return &PVZUseCase{
 		pvzRepo: pRepo,
@@ -19,6 +21,7 @@ func NewPVZUseCase(pRepo pvz.Repository, logger *slog.Logger) *PVZUseCase {
 	}
 }
 
+// CreatePVZ adds a new PVZ (pickup point) to the repository
 func (p *PVZUseCase) CreatePVZ(ctx context.Context, pvz models.PVZ) error {
 	p.logger.Info("Attempting to create PVZ", "pvz_id", pvz.ID)
 
@@ -31,6 +34,7 @@ func (p *PVZUseCase) CreatePVZ(ctx context.Context, pvz models.PVZ) error {
 	return nil
 }
 
+// GetAllPVZs retrieves all PVZ (pickup point) records from the repository
 func (p *PVZUseCase) GetAllPVZs(ctx context.Context) ([]models.PVZ, error) {
 	p.logger.Info("Fetching all PVZs")
 

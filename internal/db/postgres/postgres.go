@@ -11,6 +11,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// InitDB initialize database with AppConfig's parameters for a defined driver
 func InitDB() (*sqlx.DB, error) {
 	dbInfo := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
@@ -27,6 +28,7 @@ func InitDB() (*sqlx.DB, error) {
 	return db, nil
 }
 
+// MakeMigrations use all *.up.sql files if up is true, and *.down.sql otherwise
 func MakeMigrations(up bool) error {
 	dbLine := fmt.Sprintf("postgres://%s:%s@db:%s/%s?sslmode=disable",
 		config.AppConfig.DB.User,

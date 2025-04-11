@@ -10,11 +10,13 @@ import (
 	"log/slog"
 )
 
+// UserRepo handles database operations related to user table
 type UserRepo struct {
 	db     *sqlx.DB
 	logger *slog.Logger
 }
 
+// NewUserRepo creates a new instance of UserRepo
 func NewUserRepo(db *sqlx.DB, logger *slog.Logger) *UserRepo {
 	return &UserRepo{
 		db:     db,
@@ -22,6 +24,7 @@ func NewUserRepo(db *sqlx.DB, logger *slog.Logger) *UserRepo {
 	}
 }
 
+// Create inserts a new user record into the database
 func (r *UserRepo) Create(ctx context.Context, user models.User) error {
 	query, args, err := sq.
 		Insert("users").
@@ -44,6 +47,7 @@ func (r *UserRepo) Create(ctx context.Context, user models.User) error {
 	return nil
 }
 
+// GetByEmail retrieves a user by their email address
 func (r *UserRepo) GetByEmail(ctx context.Context, email string) (models.User, error) {
 	query, args, err := sq.
 		Select("id", "email", "role", "hash").
@@ -71,6 +75,7 @@ func (r *UserRepo) GetByEmail(ctx context.Context, email string) (models.User, e
 	return user, nil
 }
 
+// Exists checks if a user with the given email exists in the database
 func (r *UserRepo) Exists(ctx context.Context, email string) (bool, error) {
 	query, args, err := sq.
 		Select("1").

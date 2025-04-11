@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// GetAll handler show whole information about pvz and its internals
 func (h *Handler) GetAll(ctx echo.Context) error {
 	startDateStr := ctx.QueryParam("startDate")
 	endDateStr := ctx.QueryParam("endDate")
@@ -50,14 +51,14 @@ func (h *Handler) GetAll(ctx echo.Context) error {
 		}
 	}
 
-	pvzs, err := h.PvzUU.GetAllPVZs(ctx.Request().Context())
+	PVZs, err := h.PvzUU.GetAllPVZs(ctx.Request().Context())
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, base.ErrorResponse{Message: "Failed to get PVZs"})
 	}
 
 	var filtered []base.PVZResponse
 
-	for _, pvz := range pvzs {
+	for _, pvz := range PVZs {
 		if (!startDate.IsZero() && pvz.RegistrationDate.Before(startDate)) || (!endDate.IsZero() && pvz.RegistrationDate.After(endDate)) {
 			continue
 		}

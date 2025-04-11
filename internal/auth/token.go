@@ -6,7 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// GenerateToken generates and returns JWT-token with "username" claim
+// GenerateToken generates and returns JWT-token with "email" and "role" claims
 func GenerateToken(email string, role string) (string, error) {
 	claims := jwt.MapClaims{
 		"email": email,

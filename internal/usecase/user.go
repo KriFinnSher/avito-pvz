@@ -8,11 +8,13 @@ import (
 	"log/slog"
 )
 
+// UserUseCase contains business logic for managing user-related operations
 type UserUseCase struct {
 	userRepo user.Repository
 	logger   *slog.Logger
 }
 
+// NewUserUseCase creates a new UserUseCase with the given user repository and logger
 func NewUserUseCase(uRepo user.Repository, logger *slog.Logger) *UserUseCase {
 	return &UserUseCase{
 		userRepo: uRepo,
@@ -20,6 +22,7 @@ func NewUserUseCase(uRepo user.Repository, logger *slog.Logger) *UserUseCase {
 	}
 }
 
+// RegisterUser registers a new user in the system
 func (u *UserUseCase) RegisterUser(ctx context.Context, user models.User) error {
 	u.logger.Info("Attempting to register user", "email", user.Email)
 
@@ -44,6 +47,7 @@ func (u *UserUseCase) RegisterUser(ctx context.Context, user models.User) error 
 	return nil
 }
 
+// GetUserByEmail retrieves a user by their email address
 func (u *UserUseCase) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
 	u.logger.Info("Attempting to get user by email", "email", email)
 
@@ -57,6 +61,7 @@ func (u *UserUseCase) GetUserByEmail(ctx context.Context, email string) (models.
 	return myUser, nil
 }
 
+// CheckUserExists checks if a user with the given email exists in the system
 func (u *UserUseCase) CheckUserExists(ctx context.Context, email string) (bool, error) {
 	u.logger.Info("Checking if user exists", "email", email)
 

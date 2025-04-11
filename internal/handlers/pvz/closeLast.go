@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// Handler structure stands for all pvz manipulating handlers
 type Handler struct {
 	PvzUU       *usecase.PVZUseCase
 	ReceptionUU *usecase.ReceptionUseCase
@@ -16,6 +17,7 @@ type Handler struct {
 	logger      *slog.Logger
 }
 
+// NewPvzHandler creates new instance of Handler
 func NewPvzHandler(puu *usecase.PVZUseCase, ruu *usecase.ReceptionUseCase, pruu *usecase.ProductUseCase, logger *slog.Logger) *Handler {
 	return &Handler{
 		PvzUU:       puu,
@@ -25,6 +27,7 @@ func NewPvzHandler(puu *usecase.PVZUseCase, ruu *usecase.ReceptionUseCase, pruu 
 	}
 }
 
+// CloseLast handler closes last open reception (if present) of pvz with specific pvzId
 func (h *Handler) CloseLast(ctx echo.Context) error {
 	pvzIdStr := ctx.Param("pvzId")
 	pvzId, err := uuid.Parse(pvzIdStr)

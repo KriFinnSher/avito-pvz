@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// Create handler checks if there are any open receptions and if not, creates a new one
 func (h *Handler) Create(ctx echo.Context) error {
 	var req base.ReceptionRequest
 	if err := ctx.Bind(&req); err != nil {

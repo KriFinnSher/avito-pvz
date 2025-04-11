@@ -9,11 +9,13 @@ import (
 	"log/slog"
 )
 
+// ReceptionUseCase contains business logic for managing reception operations
 type ReceptionUseCase struct {
 	receptionRepo reception.Repository
 	logger        *slog.Logger
 }
 
+// NewReceptionUseCase creates a new ReceptionUseCase
 func NewReceptionUseCase(rRepo reception.Repository, logger *slog.Logger) *ReceptionUseCase {
 	return &ReceptionUseCase{
 		receptionRepo: rRepo,
@@ -21,6 +23,7 @@ func NewReceptionUseCase(rRepo reception.Repository, logger *slog.Logger) *Recep
 	}
 }
 
+// StartReception starts a new reception by adding it to the repository (if not open)
 func (r *ReceptionUseCase) StartReception(ctx context.Context, reception models.Reception) error {
 	r.logger.Info("Attempting to start reception", "receptionID", reception.ID)
 
@@ -38,6 +41,7 @@ func (r *ReceptionUseCase) StartReception(ctx context.Context, reception models.
 	return nil
 }
 
+// CloseReception closes the specified reception for the given PVZ (if open)
 func (r *ReceptionUseCase) CloseReception(ctx context.Context, receptionID uuid.UUID, pvzId uuid.UUID) error {
 	r.logger.Info("Attempting to close reception", "receptionID", receptionID)
 
@@ -57,6 +61,7 @@ func (r *ReceptionUseCase) CloseReception(ctx context.Context, receptionID uuid.
 	return nil
 }
 
+// GetLastReception retrieves the most recent reception for the given PVZ ID
 func (r *ReceptionUseCase) GetLastReception(ctx context.Context, pvzID uuid.UUID) (models.Reception, error) {
 	r.logger.Info("Attempting to get last reception for PVZ", "pvzID", pvzID)
 
@@ -70,6 +75,7 @@ func (r *ReceptionUseCase) GetLastReception(ctx context.Context, pvzID uuid.UUID
 	return MyReception, nil
 }
 
+// GetListForPVZ retrieves all receptions for the specified PVZ ID
 func (r *ReceptionUseCase) GetListForPVZ(ctx context.Context, pvzID uuid.UUID) ([]models.Reception, error) {
 	r.logger.Info("Attempting to get reception list for PVZ", "pvzID", pvzID)
 

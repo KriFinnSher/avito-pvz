@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// Register is used to create new user (if not present with specific email)
 func (h *Handler) Register(ctx echo.Context) error {
 	var req base.RegisterRequest
 

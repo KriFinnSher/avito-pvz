@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Login handler used to authenticate user and issue a token
 func (h *Handler) Login(ctx echo.Context) error {
 	var req base.LoginRequest
 

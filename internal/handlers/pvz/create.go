@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Create handler is used to create new pvz
 func (h *Handler) Create(ctx echo.Context) error {
 	var req base.PVZ
 
