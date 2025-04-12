@@ -30,6 +30,12 @@ func (h *Handler) DummyLogin(ctx echo.Context) error {
 		})
 	}
 
+	if !req.Role.Validate() {
+		return ctx.JSON(http.StatusBadRequest, base.ErrorResponse{
+			Message: "invalid user role",
+		})
+	}
+
 	token, err := auth.GenerateToken("testuser@mail.ru", string(req.Role))
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, base.ErrorResponse{

@@ -20,10 +20,16 @@ func (h *Handler) Create(ctx echo.Context) error {
 		})
 	}
 
-	userRole, ok := ctx.Get("role").(string)
+	userRole, ok := ctx.Get("role").(base.UserRole)
 	if !ok {
 		return ctx.JSON(http.StatusInternalServerError, base.ErrorResponse{
 			Message: "failed to fetch user role",
+		})
+	}
+
+	if !req.City.Validate() {
+		return ctx.JSON(http.StatusBadRequest, base.ErrorResponse{
+			Message: "invalid city for pvz",
 		})
 	}
 
@@ -34,8 +40,7 @@ func (h *Handler) Create(ctx echo.Context) error {
 		req.RegistrationDate = time.Now()
 	}
 
-	switch base.UserRole(userRole) {
-	case base.ModeratorRole:
+	if userRole.IsModerator() {
 		pvz := models.PVZ{
 			ID:               req.ID,
 			RegistrationDate: req.RegistrationDate,
@@ -47,13 +52,9 @@ func (h *Handler) Create(ctx echo.Context) error {
 				Message: "failed to create pvz",
 			})
 		}
-	case base.EmployeeRole:
+	} else {
 		return ctx.JSON(http.StatusForbidden, base.ErrorResponse{
 			Message: "access denied: insufficient permissions",
-		})
-	default:
-		return ctx.JSON(http.StatusInternalServerError, base.ErrorResponse{
-			Message: "invalid user role",
 		})
 	}
 

@@ -26,7 +26,6 @@ func TestRegisterUser_Success(t *testing.T) {
 		Hash:  "hashed_password",
 	}
 
-	userRepo.On("Exists", ctx, userEmail).Return(false, nil)
 	userRepo.On("Create", ctx, newUser).Return(nil)
 
 	useCase := NewUserUseCase(userRepo, logger)
@@ -37,7 +36,7 @@ func TestRegisterUser_Success(t *testing.T) {
 	userRepo.AssertCalled(t, "Create", ctx, newUser)
 }
 
-func TestRegisterUser_Error_UserAlreadyExists(t *testing.T) {
+func TestRegisterUser_Error(t *testing.T) {
 	ctx := context.Background()
 	userEmail := "test@example.com"
 
@@ -51,16 +50,14 @@ func TestRegisterUser_Error_UserAlreadyExists(t *testing.T) {
 		Hash:  "hashed_password",
 	}
 
-	userRepo.On("Exists", ctx, userEmail).Return(true, nil)
+	userRepo.On("Create", ctx, newUser).Return(errors.New("failed to create user"))
 
 	useCase := NewUserUseCase(userRepo, logger)
 
 	err := useCase.RegisterUser(ctx, newUser)
 
 	assert.Error(t, err)
-	assert.Equal(t, "user already exists", err.Error())
-	userRepo.AssertCalled(t, "Exists", ctx, userEmail)
-	userRepo.AssertNotCalled(t, "Create", ctx, newUser)
+	userRepo.AssertCalled(t, "Create", ctx, newUser)
 }
 
 func TestGetUserByEmail_Success(t *testing.T) {

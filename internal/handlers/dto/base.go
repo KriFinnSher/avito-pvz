@@ -33,11 +33,65 @@ type Product struct {
 
 type UserRole string
 
+func (u UserRole) Validate() bool {
+	switch u {
+	case ModeratorRole, EmployeeRole:
+		return true
+	default:
+		return false
+	}
+}
+
+func (u UserRole) IsModerator() bool {
+	switch u {
+	case ModeratorRole:
+		return true
+	default:
+		return false
+	}
+}
+
+func (u UserRole) IsEmployee() bool {
+	switch u {
+	case EmployeeRole:
+		return true
+	default:
+		return false
+	}
+}
+
 type PvzCity string
+
+func (p PvzCity) Validate() bool {
+	switch p {
+	case MoscowCity, KazanCity, SaintCity:
+		return true
+	default:
+		return false
+	}
+}
 
 type ReceptionStatus string
 
+func (r ReceptionStatus) Validate() bool {
+	switch r {
+	case InProgressStatus, CloseStatus:
+		return true
+	default:
+		return false
+	}
+}
+
 type ProductType string
+
+func (p ProductType) Validate() bool {
+	switch p {
+	case ElectronicType, ClothesType, ShoesType:
+		return true
+	default:
+		return false
+	}
+}
 
 const (
 	EmployeeRole  UserRole = "employee"

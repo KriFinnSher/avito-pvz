@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"avito-pvz/internal/auth"
+	base "avito-pvz/internal/handlers/dto"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strings"
@@ -35,7 +36,7 @@ func JwtMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		if !ok || role == "" {
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid token payload: missing role")
 		}
-		c.Set("role", role)
+		c.Set("role", base.UserRole(role))
 
 		return next(c)
 	}

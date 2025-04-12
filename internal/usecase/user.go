@@ -4,7 +4,6 @@ import (
 	"avito-pvz/internal/models"
 	"avito-pvz/internal/usecase/user"
 	"context"
-	"errors"
 	"log/slog"
 )
 
@@ -26,18 +25,7 @@ func NewUserUseCase(uRepo user.Repository, logger *slog.Logger) *UserUseCase {
 func (u *UserUseCase) RegisterUser(ctx context.Context, user models.User) error {
 	u.logger.Info("Attempting to register user", "email", user.Email)
 
-	exists, err := u.userRepo.Exists(ctx, user.Email)
-	if err != nil {
-		u.logger.Error("Failed to check if user exists", "email", user.Email, "error", err)
-		return err
-	}
-
-	if exists {
-		u.logger.Info("User already exists", "email", user.Email)
-		return errors.New("user already exists")
-	}
-
-	err = u.userRepo.Create(ctx, user)
+	err := u.userRepo.Create(ctx, user)
 	if err != nil {
 		u.logger.Error("Failed to register user", "email", user.Email, "error", err)
 		return err

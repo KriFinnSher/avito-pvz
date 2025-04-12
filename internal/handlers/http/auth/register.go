@@ -19,6 +19,12 @@ func (h *Handler) Register(ctx echo.Context) error {
 		})
 	}
 
+	if !req.Role.Validate() {
+		return ctx.JSON(http.StatusBadRequest, base.ErrorResponse{
+			Message: "invalid user role",
+		})
+	}
+
 	exists, err := h.UserUU.CheckUserExists(ctx.Request().Context(), req.Email)
 	if err != nil || exists {
 		return ctx.JSON(http.StatusBadRequest, base.ErrorResponse{
