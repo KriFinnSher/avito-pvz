@@ -2,6 +2,7 @@ package pvz
 
 import (
 	base "avito-pvz/internal/handlers"
+	"avito-pvz/internal/metrics"
 	"avito-pvz/internal/models"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -56,6 +57,7 @@ func (h *Handler) Create(ctx echo.Context) error {
 		})
 	}
 
+	metrics.IncrementCreatedPVZs()
 	return ctx.JSON(http.StatusCreated, base.PVZ{
 		ID:               req.ID,
 		RegistrationDate: req.RegistrationDate,

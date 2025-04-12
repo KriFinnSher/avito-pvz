@@ -2,6 +2,7 @@ package reception
 
 import (
 	base "avito-pvz/internal/handlers"
+	"avito-pvz/internal/metrics"
 	"avito-pvz/internal/models"
 	"avito-pvz/internal/usecase"
 	"github.com/google/uuid"
@@ -71,6 +72,7 @@ func (h *Handler) AddProduct(ctx echo.Context) error {
 			Message: "invalid user role",
 		})
 	}
+	metrics.IncrementAddedProducts()
 	return ctx.JSON(http.StatusCreated, base.Product{
 		ID:          product.ID,
 		DateTime:    product.DateTime,

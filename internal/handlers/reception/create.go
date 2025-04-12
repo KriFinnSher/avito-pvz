@@ -2,6 +2,7 @@ package reception
 
 import (
 	base "avito-pvz/internal/handlers"
+	"avito-pvz/internal/metrics"
 	"avito-pvz/internal/models"
 	"database/sql"
 	"errors"
@@ -63,6 +64,7 @@ func (h *Handler) Create(ctx echo.Context) error {
 		})
 	}
 
+	metrics.IncrementCreatedReceptions()
 	return ctx.JSON(http.StatusCreated, base.Reception{
 		ID:       reception.ID,
 		DateTime: reception.DateTime,

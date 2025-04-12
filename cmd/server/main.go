@@ -14,6 +14,7 @@ import (
 	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log/slog"
 	"net/http"
 	"os"
@@ -40,6 +41,7 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.Recover())
+	e.Use(mm.MetricsMiddleware)
 
 	userRepo := postgres.NewUserRepo(postgresDB, logger)
 	productRepo := postgres.NewProductRepo(postgresDB, logger)
@@ -70,6 +72,14 @@ func main() {
 	authGroup.POST("/receptions", receptionHandler.Create)
 	authGroup.POST("/products", receptionHandler.AddProduct)
 
+	go func() {
+		logger.Info("Prometheus metrics server starting on port 9000")
+		http.Handle("/metrics", promhttp.Handler())
+		if err = http.ListenAndServe(":9000", nil); err != nil {
+			logger.Error("Metrics server ListenAndServe: %v", "err", err)
+		}
+	}()
+
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
@@ -87,7 +97,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	if err := e.Shutdown(ctx); err != nil {
+	if err = e.Shutdown(ctx); err != nil {
 		logger.Error("failed to gracefully shut down server", "error", err)
 	}
 
