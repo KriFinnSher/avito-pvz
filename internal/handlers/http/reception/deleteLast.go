@@ -1,7 +1,7 @@
 package reception
 
 import (
-	base "avito-pvz/internal/handlers"
+	base "avito-pvz/internal/handlers/dto"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"net/http"

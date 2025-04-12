@@ -1,7 +1,7 @@
 package reception
 
 import (
-	base "avito-pvz/internal/handlers"
+	base "avito-pvz/internal/handlers/dto"
 	"avito-pvz/internal/metrics"
 	"avito-pvz/internal/models"
 	"database/sql"

@@ -2,7 +2,7 @@ package auth
 
 import (
 	"avito-pvz/internal/auth"
-	base "avito-pvz/internal/handlers"
+	base "avito-pvz/internal/handlers/dto"
 	"avito-pvz/internal/models"
 	"github.com/labstack/echo/v4"
 	"net/http"

@@ -2,15 +2,14 @@ package usecase
 
 import (
 	"avito-pvz/internal/models"
+	mockProduct "avito-pvz/internal/repository/mocks/product"
+	mockReception "avito-pvz/internal/repository/mocks/reception"
 	"context"
 	"os"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-
-	mockProduct "avito-pvz/internal/mocks/product"
-	mockReception "avito-pvz/internal/mocks/reception"
 
 	"log/slog"
 )

@@ -1,7 +1,7 @@
 package pvz
 
 import (
-	base "avito-pvz/internal/handlers"
+	base "avito-pvz/internal/handlers/dto"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"

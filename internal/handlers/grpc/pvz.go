@@ -1,4 +1,4 @@
-package handlers
+package grpc
 
 import (
 	"avito-pvz/internal/usecase"

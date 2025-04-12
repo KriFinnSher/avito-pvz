@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	mockReception "avito-pvz/internal/mocks/reception"
 	"avito-pvz/internal/models"
+	mockReception "avito-pvz/internal/repository/mocks/reception"
 	"context"
 	"errors"
 	"github.com/google/uuid"

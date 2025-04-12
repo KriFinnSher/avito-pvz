@@ -1,7 +1,7 @@
 package pvz
 
 import (
-	base "avito-pvz/internal/handlers"
+	base "avito-pvz/internal/handlers/dto"
 	"avito-pvz/internal/usecase"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -70,6 +70,6 @@ func (h *Handler) CloseLast(ctx echo.Context) error {
 		ID:       reception.ID,
 		DateTime: reception.DateTime,
 		PvzID:    reception.PvzID,
-		Status:   base.ReceptionStatus(reception.Status),
+		Status:   base.CloseStatus,
 	})
 }

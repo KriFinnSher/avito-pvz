@@ -1,7 +1,7 @@
 package tests
 
 import (
-	base "avito-pvz/internal/handlers"
+	base "avito-pvz/internal/handlers/dto"
 	"bytes"
 	"encoding/json"
 	"github.com/google/uuid"

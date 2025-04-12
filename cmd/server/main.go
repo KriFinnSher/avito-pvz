@@ -3,11 +3,11 @@ package main
 import (
 	"avito-pvz/internal/config"
 	db "avito-pvz/internal/db/postgres"
-	"avito-pvz/internal/grpc/server"
-	"avito-pvz/internal/handlers/auth"
-	"avito-pvz/internal/handlers/pvz"
-	"avito-pvz/internal/handlers/reception"
-	mm "avito-pvz/internal/middleware"
+	"avito-pvz/internal/handlers/grpc/server"
+	"avito-pvz/internal/handlers/http/auth"
+	"avito-pvz/internal/handlers/http/pvz"
+	"avito-pvz/internal/handlers/http/reception"
+	middleware3 "avito-pvz/internal/middleware"
 	"avito-pvz/internal/repository/postgres"
 	"avito-pvz/internal/usecase"
 	"context"
@@ -41,7 +41,7 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.Recover())
-	e.Use(mm.MetricsMiddleware)
+	e.Use(middleware3.MetricsMiddleware)
 
 	userRepo := postgres.NewUserRepo(postgresDB, logger)
 	productRepo := postgres.NewProductRepo(postgresDB, logger)
@@ -63,7 +63,7 @@ func main() {
 	e.POST("/register", authHandler.Register)
 	e.POST("/login", authHandler.Login)
 
-	authGroup := e.Group("", mm.JwtMiddleware)
+	authGroup := e.Group("", middleware3.JwtMiddleware)
 
 	authGroup.POST("/pvz", pvzHandler.Create)
 	authGroup.GET("/pvz", pvzHandler.GetAll)

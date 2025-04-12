@@ -1,7 +1,7 @@
 package server
 
 import (
-	"avito-pvz/internal/grpc/handlers"
+	grpc2 "avito-pvz/internal/handlers/grpc"
 	"avito-pvz/internal/usecase"
 	pb "avito-pvz/proto/pvz_v1"
 	"google.golang.org/grpc"
@@ -16,7 +16,7 @@ func RunGRPCServer(pvzUseCase *usecase.PVZUseCase, logger *slog.Logger) {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterPVZServiceServer(grpcServer, handlers.NewPVZHandler(pvzUseCase))
+	pb.RegisterPVZServiceServer(grpcServer, grpc2.NewPVZHandler(pvzUseCase))
 
 	go func() {
 		logger.Info("gRPC server starting on port 3000")

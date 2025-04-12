@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	mockPVZ "avito-pvz/internal/mocks/pvz"
 	"avito-pvz/internal/models"
+	mockPVZ "avito-pvz/internal/repository/mocks/pvz"
 	"context"
 	"errors"
 	"github.com/google/uuid"
