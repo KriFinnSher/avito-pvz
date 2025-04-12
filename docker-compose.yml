@@ -6,6 +6,7 @@ services:
     container_name: avito-pvz-service
     ports:
       - "8080:8080"
+      - "3000:3000"
     environment:
       - DATABASE_PORT=${DATABASE_PORT}
       - DATABASE_USER=${DATABASE_USER}

@@ -30,14 +30,7 @@ func (h *Handler) DummyLogin(ctx echo.Context) error {
 		})
 	}
 
-	//email, ok := ctx.Get("email").(string)
-	//if !ok {
-	//	return ctx.JSON(http.StatusBadRequest, base.ErrorResponse{
-	//		Message: "email not found in context",
-	//	})
-	//}
-
-	token, err := auth.GenerateToken("mocks@mail.ru", string(req.Role))
+	token, err := auth.GenerateToken("testuser@mail.ru", string(req.Role))
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, base.ErrorResponse{
 			Message: "failed to generate token",

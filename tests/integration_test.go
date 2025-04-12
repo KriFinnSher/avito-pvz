@@ -12,30 +12,25 @@ import (
 	"time"
 )
 
+const (
+	baseUrl = "http://localhost:8080"
+)
+
 func TestCreatePVZAndReception(t *testing.T) {
 	client := &http.Client{}
-	baseUrl := "http://localhost:8080"
 
-	registerRequestModerator := base.RegisterRequest{
-		Email:    base.TestUser1Email,
-		Password: base.TestUserPass,
-		Role:     base.ModeratorRole,
-	}
-	sendRequest(t, client, "POST", baseUrl+"/register", registerRequestModerator)
-
-	loginRequestModerator := base.LoginRequest{
-		Email:    base.TestUser1Email,
-		Password: base.TestUserPass,
-	}
-	loginRespModerator := sendRequest(t, client, "POST", baseUrl+"/login", loginRequestModerator)
-
-	tokenModerator := loginRespModerator["Token"].(string)
+	// receiving tokens for both roles
+	resp1 := GetToken(base.ModeratorRole)
+	tokenModerator := resp1["Token"].(string)
+	resp2 := GetToken(base.EmployeeRole)
+	tokenEmployee := resp2["Token"].(string)
 
 	pvzRequest := base.PVZ{
 		ID:               uuid.New(),
 		RegistrationDate: time.Now(),
 		City:             base.MoscowCity,
 	}
+	// creating new pvz
 	pvzResp := sendAuthenticatedRequest(t, client, "POST", baseUrl+"/pvz", tokenModerator, pvzRequest)
 
 	pvzID := pvzResp["id"].(string)
@@ -45,22 +40,10 @@ func TestCreatePVZAndReception(t *testing.T) {
 		"pvzId": pvzUUID,
 	}
 
-	registerRequestEmployee := base.RegisterRequest{
-		Email:    base.TestUser2Email,
-		Password: base.TestUserPass,
-		Role:     base.EmployeeRole,
-	}
-	sendRequest(t, client, "POST", baseUrl+"/register", registerRequestEmployee)
-
-	loginRequestEmployee := base.LoginRequest{
-		Email:    base.TestUser2Email,
-		Password: base.TestUserPass,
-	}
-	loginRespEmployee := sendRequest(t, client, "POST", baseUrl+"/login", loginRequestEmployee)
-
-	tokenEmployee := loginRespEmployee["Token"].(string)
+	// opening new reception
 	sendAuthenticatedRequest(t, client, "POST", baseUrl+"/receptions", tokenEmployee, receptionRequest)
 
+	// adding 50 new products to reception
 	for i := 0; i < 50; i++ {
 		productRequest := base.ProductRequest{
 			Type:  base.ElectronicType,
@@ -73,34 +56,8 @@ func TestCreatePVZAndReception(t *testing.T) {
 		PvzID: pvzUUID,
 	}
 
+	// closing reception
 	sendAuthenticatedRequest(t, client, "POST", baseUrl+"/pvz/"+pvzID+"/close_last_reception", tokenEmployee, closeRequest)
-}
-
-func sendRequest(t *testing.T, client *http.Client, method, url string, requestBody interface{}) map[string]interface{} {
-	reqBody, _ := json.Marshal(requestBody)
-	req, _ := http.NewRequest(method, url, bytes.NewBuffer(reqBody))
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, _ := client.Do(req)
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-
-		}
-	}(resp.Body)
-
-	var result map[string]interface{}
-	err := json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return nil
-	}
-
-	assert.NotEqual(t, resp.Status, http.StatusBadRequest)
-	assert.NotEqual(t, resp.Status, http.StatusInternalServerError)
-	assert.NotEqual(t, resp.Status, http.StatusForbidden)
-	assert.NotEqual(t, resp.Status, http.StatusUnauthorized)
-
-	return result
 }
 
 func sendAuthenticatedRequest(t *testing.T, client *http.Client, method, url, token string, requestBody interface{}) map[string]interface{} {
@@ -129,4 +86,23 @@ func sendAuthenticatedRequest(t *testing.T, client *http.Client, method, url, to
 	assert.NotEqual(t, resp.Status, http.StatusUnauthorized)
 
 	return result
+}
+
+func GetToken(role base.UserRole) map[string]interface{} {
+	req := base.DummyRequest{
+		Role: role,
+	}
+	ioReq, _ := json.Marshal(req)
+	resp, _ := http.Post(baseUrl+"/dummyLogin", "application/json", bytes.NewBuffer(ioReq))
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+		}
+	}(resp.Body)
+	var token map[string]interface{}
+	err := json.NewDecoder(resp.Body).Decode(&token)
+	if err != nil {
+		return nil
+	}
+	return token
 }

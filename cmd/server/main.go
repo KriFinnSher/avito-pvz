@@ -3,6 +3,7 @@ package main
 import (
 	"avito-pvz/internal/config"
 	db "avito-pvz/internal/db/postgres"
+	"avito-pvz/internal/grpc/server"
 	"avito-pvz/internal/handlers/auth"
 	"avito-pvz/internal/handlers/pvz"
 	"avito-pvz/internal/handlers/reception"
@@ -53,6 +54,8 @@ func main() {
 	authHandler := auth.NewAuthHandler(userUU)
 	pvzHandler := pvz.NewPvzHandler(pvzUU, receptionUU, productUU)
 	receptionHandler := reception.NewReceptionHandler(receptionUU, productUU)
+
+	server.RunGRPCServer(pvzUU, logger)
 
 	e.POST("/dummyLogin", authHandler.DummyLogin)
 	e.POST("/register", authHandler.Register)
