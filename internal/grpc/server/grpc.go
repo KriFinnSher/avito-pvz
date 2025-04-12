@@ -1,9 +1,9 @@
 package server
 
 import (
-	pb "avito-pvz/github.com/yourproject/pvz/pvz_v1"
 	"avito-pvz/internal/grpc/handlers"
 	"avito-pvz/internal/usecase"
+	pb "avito-pvz/proto/pvz_v1"
 	"google.golang.org/grpc"
 	"log/slog"
 	"net"

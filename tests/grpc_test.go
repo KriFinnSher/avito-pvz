@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	pb "avito-pvz/github.com/yourproject/pvz/pvz_v1"
+	pb "avito-pvz/proto/pvz_v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 )
 
 func TestGetPVZList(t *testing.T) {
-	conn, err := grpc.NewClient("localhost:3000", nil)
+	conn, err := grpc.NewClient("localhost:3000", grpc.WithInsecure())
 	if err != nil {
 		t.Fatalf("did not connect: %v", err)
 	}
@@ -23,5 +23,6 @@ func TestGetPVZList(t *testing.T) {
 		t.Fatalf("Error calling GetPVZList: %v", err)
 	}
 
+	t.Log("Response:", resp)
 	assert.NotNil(t, resp, "Response should not be nil")
 }

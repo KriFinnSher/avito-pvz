@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	pb "avito-pvz/github.com/yourproject/pvz/pvz_v1"
 	"avito-pvz/internal/usecase"
+	pb "avito-pvz/proto/pvz_v1"
 	"context"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
