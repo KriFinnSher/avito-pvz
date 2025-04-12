@@ -27,11 +27,6 @@ func NewReceptionUseCase(rRepo reception.Repository, logger *slog.Logger) *Recep
 func (r *ReceptionUseCase) StartReception(ctx context.Context, reception models.Reception) error {
 	r.logger.Info("Attempting to start reception", "receptionID", reception.ID)
 
-	if r.receptionRepo.IsOpen(ctx, reception.ID) {
-		r.logger.Info("Reception already started", "receptionID", reception.ID)
-		return errors.New("reception is already open")
-	}
-
 	if err := r.receptionRepo.Create(ctx, reception); err != nil {
 		r.logger.Error("Failed to start reception", "receptionID", reception.ID, "error", err)
 		return err
