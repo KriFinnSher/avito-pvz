@@ -116,3 +116,9 @@ type GetPVZQueryParams struct {
 	Page      int    `json:"page,omitempty"`
 	Limit     int    `json:"limit,omitempty"`
 }
+
+const (
+	TestUser1Email = "testuser1@example.com"
+	TestUser2Email = "testuser2@example.com"
+	TestUserPass   = "password123"
+)
