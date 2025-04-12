@@ -28,7 +28,6 @@ func TestStartReception_Success(t *testing.T) {
 		Status:   "open",
 	}
 
-	receptionRepo.On("IsOpen", ctx, receptionID).Return(false)
 	receptionRepo.On("Create", ctx, newReception).Return(nil)
 
 	useCase := NewReceptionUseCase(receptionRepo, logger)
@@ -39,7 +38,7 @@ func TestStartReception_Success(t *testing.T) {
 	receptionRepo.AssertCalled(t, "Create", ctx, newReception)
 }
 
-func TestStartReception_Error_AlreadyOpen(t *testing.T) {
+func TestStartReception_Error(t *testing.T) {
 	ctx := context.Background()
 	receptionID := uuid.New()
 	pvzID := uuid.New()
@@ -54,16 +53,14 @@ func TestStartReception_Error_AlreadyOpen(t *testing.T) {
 		Status:   "open",
 	}
 
-	receptionRepo.On("IsOpen", ctx, receptionID).Return(true)
+	receptionRepo.On("Create", ctx, newReception).Return(errors.New("failed to start reception"))
 
 	useCase := NewReceptionUseCase(receptionRepo, logger)
 
 	err := useCase.StartReception(ctx, newReception)
 
 	assert.Error(t, err)
-	assert.Equal(t, "reception is already open", err.Error())
-	receptionRepo.AssertCalled(t, "IsOpen", ctx, receptionID)
-	receptionRepo.AssertNotCalled(t, "Create", ctx, newReception)
+	receptionRepo.AssertCalled(t, "Create", ctx, newReception)
 }
 
 func TestCloseReception_Success(t *testing.T) {

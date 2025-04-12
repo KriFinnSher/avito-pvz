@@ -76,7 +76,7 @@ func main() {
 		logger.Info("Prometheus metrics server starting on port 9000")
 		http.Handle("/metrics", promhttp.Handler())
 		if err = http.ListenAndServe(":9000", nil); err != nil {
-			logger.Error("Metrics server ListenAndServe: %v", "err", err)
+			logger.Error("Metrics server ListenAndServe", "err", err)
 		}
 	}()
 
